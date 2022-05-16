@@ -3,6 +3,7 @@ import { chartOptions } from './chartOptions';
 import path = require('path');
 import echarts = require('echarts');
 import playwright = require('playwright-core');
+import { getBrowser } from './getBrowser';
 
 interface RenderOptions extends playwright.JSHandle {
   chartOptions: echarts.EChartsOption;
@@ -26,28 +27,12 @@ export class EChartsService {
     </body>
     </html>`;
 
-  /**
-   * 根据配置、宽度、高度进行echarts图表渲染
-   * @param renderOptions 图表渲染配置项
-   */
-  renderChart(renderOptions: RenderOptions) {
-    const { chartOptions: options, width, height } = renderOptions;
-    const container = document.getElementById('chart');
-    container.style.width = `${width}px`;
-    container.style.height = `${height}px`;
-    const chart = echarts.init(container);
-    chart.setOption({ ...options, animation: false });
-  }
-
   async getChart(options: echarts.EChartsOption, outputOptions: chartOptions) {
-    this.logger.log('Starting chromium browser');
-    const browser = await playwright.chromium.launch({
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
+    const browser = await getBrowser();
+    this.logger.debug('Starting new page');
+    const page = await browser.newPage();
 
     try {
-      this.logger.debug('Starting new page');
-      const page = await browser.newPage();
       await page.setContent(this.pageHtml);
       await page.addScriptTag({
         path: path.join(__dirname, '../node_modules/echarts/dist/echarts.js'),
@@ -62,8 +47,21 @@ export class EChartsService {
       this.logger.debug('Exporting chart image');
       return await element.screenshot({ type: 'png' });
     } finally {
-      this.logger.log('Closing browser');
-      await browser.close();
+      this.logger.log('Closing page');
+      await page.close();
     }
+  }
+
+  /**
+   * 根据配置、宽度、高度进行echarts图表渲染
+   * @param renderOptions 图表渲染配置项
+   */
+  renderChart(renderOptions: RenderOptions) {
+    const { chartOptions: options, width, height } = renderOptions;
+    const container = document.getElementById('chart');
+    container.style.width = `${width}px`;
+    container.style.height = `${height}px`;
+    const chart = echarts.init(container);
+    chart.setOption({ ...options, animation: false });
   }
 }
