@@ -1,5 +1,16 @@
-Invoke-Command -ScriptBlock {
-    docker build -t echarts-exporting-server:latest .
-    docker tag echarts-exporting-server:latest mflexdockhub.azurecr.cn/echarts-exporting-server:latest
-    docker push mflexdockhub.azurecr.cn/echarts-exporting-server:latest
-}
+Write-Host "Start building docker image"
+
+$ImageVersion = "0.0.1.0"
+$ImageTag = "mfcharbor.mflex.com.cn/mes/echarts-exporting-server"
+
+Start-Process "docker" `
+    -ArgumentList "build -t ${ImageTag}:${ImageVersion} ." `
+    -NoNewWindow `
+    -Wait
+
+Start-Process "docker" `
+    -ArgumentList "push ${ImageTag}:${ImageVersion}" `
+    -NoNewWindow `
+    -Wait
+
+Write-Host "Complete pushing docker image to harbor"
