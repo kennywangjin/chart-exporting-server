@@ -1,6 +1,6 @@
 Write-Host "Start building docker image"
 
-$ImageVersion = "0.0.1.0"
+$ImageVersion = "0.0.2.0"
 $ImageTag = "mfcharbor.mflex.com.cn/mes/echarts-exporting-server"
 
 Start-Process "docker" `
