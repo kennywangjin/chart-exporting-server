@@ -11,7 +11,6 @@ export class PdfController {
 
   @Post()
   @Header('Content-Type', 'application/pdf')
-  @Header('Content-Disposition', 'attachment')
   @ApiBody({ type: PdfDto })
   async getPdf(@Body() pdf: PdfDto, @Res() res: Response) {
     const buffer = await this.pdfService.getPdf(pdf.html);

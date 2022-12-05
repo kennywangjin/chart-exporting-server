@@ -12,7 +12,6 @@ export class EChartsController {
 
   @Post()
   @Header('Content-Type', 'image/png')
-  @Header('Content-Disposition', 'attachment')
   @ApiBody({ schema: { type: 'object' } })
   @ApiQuery({ name: 'width', type: 'number', required: false })
   @ApiQuery({ name: 'height', type: 'number', required: false })
