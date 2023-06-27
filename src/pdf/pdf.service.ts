@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { getBrowser } from './getBrowser';
+import { getBrowser } from '../getBrowser';
 
 @Injectable()
 export class PdfService {

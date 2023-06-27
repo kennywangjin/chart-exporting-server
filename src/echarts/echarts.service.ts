@@ -3,7 +3,7 @@ import { chartOptions } from './chartOptions';
 import path = require('path');
 import echarts = require('echarts');
 import playwright = require('playwright-core');
-import { getBrowser } from './getBrowser';
+import { getBrowser } from '../getBrowser';
 
 interface RenderOptions extends playwright.JSHandle {
   chartOptions: echarts.EChartsOption;
@@ -56,7 +56,7 @@ export class EChartsService {
    * 根据配置、宽度、高度进行echarts图表渲染
    * @param renderOptions 图表渲染配置项
    */
-  renderChart(renderOptions: RenderOptions) {
+  private renderChart(renderOptions: RenderOptions) {
     const { chartOptions: options, width, height } = renderOptions;
     const container = document.getElementById('chart');
     container.style.width = `${width}px`;
