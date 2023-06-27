@@ -10,12 +10,12 @@ export class G2plotController {
 
   @Post()
   @Header('Content-Type', 'image/png')
-  @ApiBody({ schema: { type: 'object' } })
-  @ApiQuery({ name: 'chartType', type: 'string', required: false })
+  @ApiBody({ schema: { type: 'object' }, required: true })
+  @ApiQuery({ name: 'chartType', type: 'string', required: true })
   async GenerateChart(
-    @Body() options: any,
-    @Res() res: Response,
     @Query('chartType') chartType: string,
+    @Body() options: object,
+    @Res() res: Response,
   ) {
     const buffer = await this.chartService.getChart({
       chartType: chartType,

@@ -1,7 +1,7 @@
 import { Body, Controller, Header, Post, Query, Res } from '@nestjs/common';
 import { EChartsOption } from 'echarts';
 import { Readable } from 'stream';
-import { chartOptions } from './chartOptions';
+import { ChartOptions } from './chartOptions';
 import { EChartsService } from './echarts.service';
 import { Response } from 'express';
 import { ApiBody, ApiQuery } from '@nestjs/swagger';
@@ -12,7 +12,7 @@ export class EChartsController {
 
   @Post()
   @Header('Content-Type', 'image/png')
-  @ApiBody({ schema: { type: 'object' } })
+  @ApiBody({ schema: { type: 'object' }, required: true })
   @ApiQuery({ name: 'width', type: 'number', required: false })
   @ApiQuery({ name: 'height', type: 'number', required: false })
   async GenerateChart(
@@ -21,7 +21,7 @@ export class EChartsController {
     @Query('width') width?: number,
     @Query('height') height?: number,
   ) {
-    const outputOptions: chartOptions = {
+    const outputOptions: ChartOptions = {
       width: width ?? 800,
       height: height ?? 600,
     };

@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { chartOptions } from './chartOptions';
+import { ChartOptions } from './chartOptions';
 import path = require('path');
 import echarts = require('echarts');
 import playwright = require('playwright-core');
@@ -27,7 +27,7 @@ export class EChartsService {
     </body>
     </html>`;
 
-  async getChart(options: echarts.EChartsOption, outputOptions: chartOptions) {
+  async getChart(options: echarts.EChartsOption, outputOptions: ChartOptions) {
     const browser = await getBrowser();
     this.logger.debug('Starting new page');
     const page = await browser.newPage();
@@ -47,6 +47,7 @@ export class EChartsService {
         ...outputOptions,
       } as RenderOptions);
       const element = page.locator('#chart');
+      element.waitFor({ state: 'visible' });
       this.logger.debug('Exporting chart image');
       return await element.screenshot({ type: 'png' });
     } finally {
@@ -60,11 +61,11 @@ export class EChartsService {
    * @param renderOptions 图表渲染配置项
    */
   private renderChart(renderOptions: RenderOptions) {
-    const { chartOptions: options, width, height } = renderOptions;
+    const { chartOptions, width, height } = renderOptions;
     const container = document.getElementById('chart');
     container.style.width = `${width}px`;
     container.style.height = `${height}px`;
     const chart = echarts.init(container);
-    chart.setOption({ ...options, animation: false });
+    chart.setOption({ ...chartOptions, animation: false });
   }
 }

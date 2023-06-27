@@ -1,4 +1,4 @@
-import { chromium, Browser } from 'playwright';
+import { Browser, chromium } from 'playwright';
 
 let browser: Browser | undefined = undefined;
 /**

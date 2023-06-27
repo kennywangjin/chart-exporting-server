@@ -2,11 +2,9 @@ import { Injectable, Logger } from '@nestjs/common';
 import { getBrowser } from '../getBrowser';
 import path = require('path');
 import playwright = require('playwright-core');
+import { ChartOptions } from './chartOptions';
 
-interface RenderOptions extends playwright.JSHandle {
-  chartType: string;
-  chartOptions: any;
-}
+interface RenderOptions extends playwright.JSHandle, ChartOptions {}
 
 @Injectable()
 export class G2plotService {
@@ -17,14 +15,14 @@ export class G2plotService {
       <meta charset="UTF-8">
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>ECharts</title>
+      <title>g2plot</title>
     </head>
     <body>
       <div id="chart"></div>
     </body>
     </html>`;
 
-  async getChart(options: any) {
+  async getChart(options: ChartOptions) {
     const browser = await getBrowser();
     this.logger.debug('Starting new page');
     const page = await browser.newPage();
@@ -51,66 +49,98 @@ export class G2plotService {
   }
 
   renderChart(options: RenderOptions) {
+    const { chartType, chartOptions } = options;
     const G2Plot = (window as any).G2Plot;
     let chart: any;
     const container = document.getElementById('chart');
-    switch (options.chartType.toLowerCase()) {
+
+    switch (chartType.toLowerCase()) {
       case 'area':
-        chart = new G2Plot.Line(container, options.chartOptions);
+        chart = new G2Plot.Line(container, chartOptions);
         break;
       case 'bar':
-        chart = new G2Plot.Bar(container, options.chartOptions);
+        chart = new G2Plot.Bar(container, chartOptions);
+        break;
+      case 'bidirectionalbar':
+        chart = new G2Plot.BidirectionalBar(container, chartOptions);
         break;
       case 'box':
-        chart = new G2Plot.Box(container, options.chartOptions);
+        chart = new G2Plot.Box(container, chartOptions);
         break;
       case 'bullet':
-        chart = new G2Plot.Bullet(container, options.chartOptions);
+        chart = new G2Plot.Bullet(container, chartOptions);
+        break;
+      case 'chord':
+        chart = new G2Plot.Chord(container, chartOptions);
+        break;
+      case 'circlepacking':
+        chart = new G2Plot.CirclePacking(container, chartOptions);
         break;
       case 'column':
-        chart = new G2Plot.Column(container, options.chartOptions);
+        chart = new G2Plot.Column(container, chartOptions);
+        break;
+      case 'dualaxes':
+        chart = new G2Plot.DualAxes(container, chartOptions);
         break;
       case 'facet':
-        chart = new G2Plot.Facet(container, options.chartOptions);
+        chart = new G2Plot.Facet(container, chartOptions);
         break;
       case 'funnel':
-        chart = new G2Plot.Funnel(container, options.chartOptions);
+        chart = new G2Plot.Funnel(container, chartOptions);
         break;
       case 'gauge':
-        chart = new G2Plot.Gauge(container, options.chartOptions);
+        chart = new G2Plot.Gauge(container, chartOptions);
         break;
       case 'heatmap':
-        chart = new G2Plot.Heatmap(container, options.chartOptions);
+        chart = new G2Plot.Heatmap(container, chartOptions);
         break;
       case 'histogram':
-        chart = new G2Plot.Histogram(container, options.chartOptions);
+        chart = new G2Plot.Histogram(container, chartOptions);
         break;
       case 'line':
-        chart = new G2Plot.Line(container, options.chartOptions);
+        chart = new G2Plot.Line(container, chartOptions);
         break;
       case 'liquid':
-        chart = new G2Plot.Liquid(container, options.chartOptions);
+        chart = new G2Plot.Liquid(container, chartOptions);
         break;
       case 'pie':
-        chart = new G2Plot.Pie(container, options.chartOptions);
+        chart = new G2Plot.Pie(container, chartOptions);
         break;
       case 'radar':
-        chart = new G2Plot.Radar(container, options.chartOptions);
+        chart = new G2Plot.Radar(container, chartOptions);
+        break;
+      case 'radialbar':
+        chart = new G2Plot.RadialBar(container, chartOptions);
         break;
       case 'rose':
-        chart = new G2Plot.Rose(container, options.chartOptions);
+        chart = new G2Plot.Rose(container, chartOptions);
+        break;
+      case 'sankey':
+        chart = new G2Plot.Sankey(container, chartOptions);
         break;
       case 'scatter':
-        chart = new G2Plot.Scatter(container, options.chartOptions);
+        chart = new G2Plot.Scatter(container, chartOptions);
+        break;
+      case 'stock':
+        chart = new G2Plot.Stock(container, chartOptions);
+        break;
+      case 'sunburst':
+        chart = new G2Plot.Sunburst(container, chartOptions);
+        break;
+      case 'treemap':
+        chart = new G2Plot.Treemap(container, chartOptions);
         break;
       case 'venn':
-        chart = new G2Plot.Venn(container, options.chartOptions);
+        chart = new G2Plot.Venn(container, chartOptions);
         break;
       case 'violin':
-        chart = new G2Plot.Violin(container, options.chartOptions);
+        chart = new G2Plot.Violin(container, chartOptions);
         break;
       case 'waterfall':
-        chart = new G2Plot.Waterfall(container, options.chartOptions);
+        chart = new G2Plot.Waterfall(container, chartOptions);
+        break;
+      case 'wordcloud':
+        chart = new G2Plot.WordCloud(container, chartOptions);
         break;
       default:
         throw new Error('unsupported chart type');
