@@ -35,7 +35,10 @@ export class EChartsService {
     try {
       await page.setContent(this.pageHtml);
       await page.addScriptTag({
-        path: path.join(__dirname, '../node_modules/echarts/dist/echarts.js'),
+        path: path.join(
+          __dirname,
+          '../../node_modules/echarts/dist/echarts.js',
+        ),
       });
 
       this.logger.debug('Generating chart image');
@@ -43,7 +46,7 @@ export class EChartsService {
         chartOptions: options,
         ...outputOptions,
       } as RenderOptions);
-      const element = await page.$('#chart');
+      const element = page.locator('#chart');
       this.logger.debug('Exporting chart image');
       return await element.screenshot({ type: 'png' });
     } finally {

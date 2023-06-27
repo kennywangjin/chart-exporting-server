@@ -1,4 +1,33 @@
-import { Controller } from '@nestjs/common';
+import { Body, Controller, Header, Post, Query, Res } from '@nestjs/common';
+import { G2plotService } from './g2plot.service';
+import { ApiBody, ApiQuery } from '@nestjs/swagger';
+import { Readable } from 'stream';
+import { Response } from 'express';
 
 @Controller('g2plot')
-export class G2plotController {}
+export class G2plotController {
+  constructor(private readonly chartService: G2plotService) {}
+
+  @Post()
+  @Header('Content-Type', 'image/png')
+  @ApiBody({ schema: { type: 'object' } })
+  @ApiQuery({ name: 'chartType', type: 'string', required: false })
+  async GenerateChart(
+    @Body() options: any,
+    @Res() res: Response,
+    @Query('chartType') chartType: string,
+  ) {
+    const buffer = await this.chartService.getChart({
+      chartType: chartType,
+      chartOptions: {
+        ...options,
+        animation: false,
+        locale: 'zh-CN',
+      },
+    });
+    const stream = new Readable();
+    stream.push(buffer);
+    stream.push(null);
+    return stream.pipe(res);
+  }
+}
