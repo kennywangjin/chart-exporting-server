@@ -11,7 +11,13 @@ export class G2plotController {
   @Post()
   @Header('Content-Type', 'image/png')
   @ApiBody({ schema: { type: 'object' }, required: true })
-  @ApiQuery({ name: 'chartType', type: 'string', required: true })
+  @ApiQuery({
+    name: 'chartType',
+    type: 'string',
+    required: true,
+    example:
+      'area, bar, bidirectionalbar, box, bullet, chord, circlepacking, column, dualaxes, facet, funnel, gauge, heatmap, histogram, line, liquid, pie, radar, radialbar, rose, sankey, scatter, stock, sunburst, treemap, venn, violin, waterfall, wordcloud',
+  })
   async GenerateChart(
     @Query('chartType') chartType: string,
     @Body() options: object,
