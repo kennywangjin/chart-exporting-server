@@ -1,10 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { getBrowser } from '../getBrowser';
 import path = require('path');
-import playwright = require('playwright-core');
 import { ChartOptions } from './chartOptions';
-
-interface RenderOptions extends playwright.JSHandle, ChartOptions {}
 
 @Injectable()
 export class G2plotService {
@@ -48,7 +45,7 @@ export class G2plotService {
     }
   }
 
-  renderChart(options: RenderOptions) {
+  renderChart(options: ChartOptions) {
     const { chartType, chartOptions } = options;
     const G2Plot = (window as any).G2Plot;
     let chart: any;
