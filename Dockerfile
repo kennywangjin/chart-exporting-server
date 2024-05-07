@@ -6,7 +6,7 @@ RUN npm config set registry https://registry.npmmirror.com && npm install
 COPY . .
 RUN npm run build && npm prune --production
 
-FROM mcr.microsoft.com/playwright:v1.35.0-jammy
+FROM mcr.microsoft.com/playwright:v1.44.0-jammy
 ENV NODE_ENV production
 EXPOSE 3000
 WORKDIR /app
